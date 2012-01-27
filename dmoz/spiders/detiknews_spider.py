@@ -18,12 +18,12 @@ class DetiknewsSeeder(BaseSeeder):
     def parse(self, response):
         hxs = HtmlXPathSelector(response)
         categories = []
-        categories_html = hxs.select('/html/body/div[2]/div[2]/div/h4')
+        categories_html = hxs.select('//div[@class="title_3"]')
         for category in categories_html:
             if len(category.select('text()').extract()) > 0:
                 categories.append(category.select('text()').extract()[0])
 
-        news_groups = hxs.select('/html/body/div[2]/div[2]/div/ul')
+        news_groups = hxs.select('//ul[@class="list_indeks"]')
         items = []
         idx_group = 0
         for news_group in news_groups:
@@ -44,12 +44,12 @@ class DetiknewsSeeder(BaseSeeder):
 class DetiknewsFetcher(BaseFetcher):
     name = "fetcher-detiknews"
     source = "detiknews.com"
-    xpath_title = '//div[@id="isiberita"]/span[@class="judul"]'
-    xpath_content = '//div[@id="isiberita"]/text()'
-    xpath_subtitle = '//span[@class="subjudul"]'
+    xpath_title = '//div[@class="content_detail"]/h1'
+    xpath_content = '//div[@class="text_detail"]/text()'
+    xpath_subtitle = '//div[@class="content_detail"]/h2'
     xpath_published_at = '//span[@class="date"]'
-    xpath_place = '//div[@id="isiberita"]/strong'
-    xpath_author = '//span[@class="reporter"]/strong'
+    xpath_place = '//div[@class="text_detail"]/strong'
+    xpath_author = '//div[@class="author"]/strong'
 
     def parse_date(self, date_str):
         date_partition = date_str.split(' ')
