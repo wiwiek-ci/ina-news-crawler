@@ -118,8 +118,8 @@ class MySQLStorePipeline(object):
             # Then insert
             cursor = conn.cursor()
             query = """
-                INSERT INTO article(id, source, url, category, title, content, subtitle, published_at, place, author)
-                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+                INSERT INTO article(id, source, url, category, title, content, subtitle, published_at, place, author, is_gathered)
+                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, 0)
             """
             cursor.execute(query, (item['id'], item['source'], item['url'], item['category'], item['title'], item['content'], item['subtitle'], item['published_at'], item['place'], item['author']))
             return item

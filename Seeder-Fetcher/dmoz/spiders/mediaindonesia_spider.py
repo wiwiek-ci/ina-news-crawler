@@ -5,7 +5,7 @@ from dmoz.spiders.base_spider import BaseSeeder
 
 #
 # MEDIAINDONESIA SEEDER
-#
+# 
 class MediaindonesiaSeeder(BaseSeeder):
     name = "seeder-mediaindonesia"
     source = "mediaindonesia.com"

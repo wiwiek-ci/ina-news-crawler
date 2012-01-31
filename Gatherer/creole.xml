@@ -1,0 +1,17 @@
+<CREOLE-DIRECTORY>
+	<CREOLE>  
+		<RESOURCE>
+			<NAME>Annotation Type to Feature Converter</NAME>  
+			<JAR>dist/Nu_GATE_Utilities.jar</JAR>  
+			<CLASS>itb.nlp.gate.utilities.AnnTypeToFeatureConverter</CLASS>  
+			<COMMENT>Convert annotation types to fetaure of annotation.</COMMENT>
+			<PARAMETER NAME="document" RUNTIME="true">gate.Document</PARAMETER>
+			<PARAMETER NAME="inputASName" RUNTIME="true" OPTIONAL="true">java.lang.String</PARAMETER>
+			<PARAMETER NAME="outputASName" RUNTIME="true" OPTIONAL="true">java.lang.String</PARAMETER>
+			<PARAMETER NAME="sourceTypes" RUNTIME="true" OPTIONAL="false">java.util.Set</PARAMETER>
+			<PARAMETER NAME="destType" RUNTIME="true" OPTIONAL="false" DEFAULT="Merged">java.lang.String</PARAMETER>
+			<PARAMETER NAME="featureLabel" RUNTIME="true" OPTIONAL="false" DEFAULT="type">java.lang.String</PARAMETER>
+			<PARAMETER NAME="keepSourceAnnotations" RUNTIME="true" OPTIONAL="true" DEFAULT="true">java.lang.Boolean</PARAMETER>
+		</RESOURCE>
+	</CREOLE>
+</CREOLE-DIRECTORY>
