@@ -1,0 +1,1 @@
+java -Dgate.plugins.home="D:\APPS\gate-6.0\plugins" -Dgate.site.config=D:\APPS\gate-6.0\gate.xml  -jar dist\Gatherer.jar
