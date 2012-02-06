@@ -38,6 +38,14 @@ class DetiknewsSeeder(BaseSeeder):
             idx_group += 1
         return items
 
+    def normalize_category(self, category_str):
+        if category_str.lower() in ('berita'):
+            return self.CATEGORY_NATIONAL
+        elif category_str.lower() in ('internasional', 'bbc world'):
+            return self.CATEGORY_INTERNATIONAL
+        else:
+            return self.CATEGORY_OTHERS
+
 #
 # DETIKNEWS FETCHER
 #

@@ -22,6 +22,26 @@ class MediaindonesiaSeeder(BaseSeeder):
         "http://www.mediaindonesia.com/rss/14/humaniora"
     ]
 
+    def normalize_category(self, category_str):
+        if category_str.lower() in ('590285', '590289', 'tanahair'):
+            return self.CATEGORY_NATIONAL
+        elif category_str.lower() in ('590290'):
+            return self.CATEGORY_INTERNATIONAL
+        elif category_str.lower() in ('590286'):
+            return self.CATEGORY_ECONOMY
+        elif category_str.lower() in ('590287'):
+            return self.CATEGORY_SPORTS
+        elif category_str.lower() in ('590288'):
+            return self.CATEGORY_FOOTBALL
+        elif category_str.lower() in ('590291'):
+            return self.CATEGORY_SCITECH
+        elif category_str.lower() in ('590294'):
+            return self.CATEGORY_ENTERTAINMENT
+        elif category_str.lower() in ('590295', '590292'):
+            return self.CATEGORY_HUMANIORA
+        else:
+            return self.CATEGORY_OTHERS
+
 #
 # MEDIAINDONESIA FETCHER
 #

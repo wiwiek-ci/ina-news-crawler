@@ -14,6 +14,16 @@ import feedparser
 # BASE SEEDER
 #
 class BaseSeeder(BaseSpider):
+    CATEGORY_NATIONAL = "Nasional"
+    CATEGORY_INTERNATIONAL = "Internasional"
+    CATEGORY_ECONOMY = "Ekonomi"
+    CATEGORY_SPORTS = "Olahraga"
+    CATEGORY_FOOTBALL = "Sepakbola"
+    CATEGORY_SCITECH = "Iptek"
+    CATEGORY_HUMANIORA = "Humaniora"
+    CATEGORY_ENTERTAINMENT = "Hiburan"
+    CATEGORY_OTHERS = "Lain-lain"
+
     name = None
     source = None
     start_urls = None
@@ -29,13 +39,21 @@ class BaseSeeder(BaseSpider):
         for entry in d['entries']:
             item = SeedItem()
             item['source'] = self.source
-            item['category'] = category
+            item['category'] = self.normalize_category(category)
             item['url'] = entry.link
             items.append(item)
         return items
 
     def parse_category(self, response):
-        return response.url.rpartition('/')[2]
+        prep_url = response.url.rpartition('/')[0]
+        pos_url = response.url.rpartition('/')[2]
+        if pos_url == 'index.rss':
+            return prep_url.rpartition('/')[2]
+        else:
+            return pos_url
+
+    def normalize_category(self, category_str):
+        return category_str
 
 #
 # BASE FETCHER

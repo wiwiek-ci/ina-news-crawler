@@ -22,6 +22,22 @@ class KompasSeeder(BaseSeeder):
         "http://www.kompas.com/getrss/edukasi"
     ]
 
+    def normalize_category(self, category_str):
+        if category_str.lower() in ('589597', 'regional', 'megapolitan'):
+            return self.CATEGORY_NATIONAL
+        elif category_str.lower() in ('internasional'):
+            return self.CATEGORY_INTERNATIONAL
+        elif category_str.lower() in ('bisniskeuangan'):
+            return self.CATEGORY_ECONOMY
+        elif category_str.lower() in ('olahraga'):
+            return self.CATEGORY_SPORTS
+        elif category_str.lower() in ('sains'):
+            return self.CATEGORY_SCITECH
+        elif category_str.lower() in ('travel', 'oase', 'edukasi'):
+            return self.CATEGORY_HUMANIORA
+        else:
+            return self.CATEGORY_OTHERS
+
 #
 # KOMPAS FETCHER
 #
