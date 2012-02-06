@@ -18,5 +18,4 @@ USER_AGENT = '%s/%s' % (BOT_NAME, BOT_VERSION)
 ITEM_PIPELINES = [
     'dmoz.pipelines.FilterAndFlagPipeline',
     'dmoz.pipelines.DuplicatePipeline',
-    'dmoz.pipelines.NormalizeCategoryPipelines',
     'dmoz.pipelines.MySQLStorePipeline']

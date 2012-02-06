@@ -65,34 +65,6 @@ class DuplicatePipeline(object):
             # Do not check duplicate
             return item
 
-class NormalizeCategoryPipelines(object):
-    def process_item(self, item, spider):
-        # Seeder
-        if spider.name.find("seeder-") == 0:
-            if item['category'].lower() in ('nasional', 'berita', 'politik', 'megapolitan', 'regional'):
-                item['category'] = "Nasional"
-            elif item['category'].lower() in ('internasional', 'bbc world', 'mancanegara'):
-                item['category'] = "Internasional"
-            elif item['category'].lower() in ('ekonomi', 'bisniskeuangan'):
-                item['category'] = "Ekonomi"
-            elif item['category'].lower() in ('olahraga'):
-                item['category'] = "Olahraga"
-            elif item['category'].lower() in ('sepakbola'):
-                item['category'] = "Sepakbola"
-            elif item['category'].lower() in ('iptek', 'sains'):
-                item['category'] = "Iptek"
-            elif item['category'].lower() in ('humaniora', 'travel', 'oase', 'edukasi'):
-                item['category'] = "Humaniora"
-            elif item['category'].lower() in ('hiburan'):
-                item['category'] = "Hiburan"
-            else:
-                item['category'] = "Lain-lain"
-            return item
-        # Fetcher
-        elif spider.name.find("fetcher-") == 0:
-            # No process
-            return item
-
 class MySQLStorePipeline(object):
     def process_item(self, item, spider):
         global conn
