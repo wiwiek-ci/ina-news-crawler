@@ -43,11 +43,24 @@ elif sys.argv[1] == "fetcher":
     is_continue = True
     while is_continue:
         try:
-            os.system(cmd)
-            time.sleep(fetcher_interval)
+			os.system(cmd)
+			time.sleep(fetcher_interval)
         except (KeyboardInterrupt, SystemExit):
             is_continue = False
             print "Program will exit..."
+elif sys.argv[1] == "fetcher-single":
+	cmd = "scrapy crawl "
+	cmd += "fetcher-" + sys.argv[2] + " "
+	cmd += " --nolog"
+	print "Running Fetcher (Press Ctrl+C to stop)"
+	is_continue = True
+	while is_continue:
+		try:
+			os.system(cmd)
+			time.sleep(fetcher_interval)
+		except (KeyboardInterrupt, SystemExit):
+			is_continue = False
+			print "Program will exit..."
 else:
     print "Argument: 'seeder' or 'fetcher'"
     exit()
