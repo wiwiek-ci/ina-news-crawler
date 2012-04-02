@@ -1,13 +1,14 @@
 -- phpMyAdmin SQL Dump
--- version 3.2.4
+-- version 3.4.5
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Jan 31, 2012 at 07:07 AM
--- Server version: 5.1.41
--- PHP Version: 5.3.1
+-- Generation Time: Mar 02, 2012 at 08:52 AM
+-- Server version: 5.5.16
+-- PHP Version: 5.3.8
 
 SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
+SET time_zone = "+00:00";
 
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
@@ -57,7 +58,7 @@ CREATE TABLE IF NOT EXISTS `seed` (
   `fetched_at` datetime DEFAULT NULL,
   `status` varchar(10) NOT NULL DEFAULT 'new',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=953 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1319 ;
 
 -- --------------------------------------------------------
 
@@ -71,6 +72,71 @@ CREATE TABLE IF NOT EXISTS `status` (
   `lastactive_at` datetime NOT NULL,
   PRIMARY KEY (`spider`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Stand-in structure for view `v_stats_seed_category`
+--
+CREATE TABLE IF NOT EXISTS `v_stats_seed_category` (
+`source` varchar(25)
+,`category` varchar(25)
+,`total` bigint(21)
+,`new` bigint(21)
+,`ok` bigint(21)
+,`err` bigint(21)
+);
+-- --------------------------------------------------------
+
+--
+-- Stand-in structure for view `v_stats_seed_date`
+--
+CREATE TABLE IF NOT EXISTS `v_stats_seed_date` (
+`source` varchar(25)
+,`insert_date` date
+,`total` bigint(21)
+,`new` bigint(21)
+,`ok` bigint(21)
+,`err` bigint(21)
+);
+-- --------------------------------------------------------
+
+--
+-- Stand-in structure for view `v_stats_seed_overall`
+--
+CREATE TABLE IF NOT EXISTS `v_stats_seed_overall` (
+`source` varchar(25)
+,`total` bigint(21)
+,`new` bigint(21)
+,`ok` bigint(21)
+,`err` bigint(21)
+);
+-- --------------------------------------------------------
+
+--
+-- Structure for view `v_stats_seed_category`
+--
+DROP TABLE IF EXISTS `v_stats_seed_category`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `v_stats_seed_category` AS select `seed`.`source` AS `source`,`seed`.`category` AS `category`,count(`seed`.`id`) AS `total`,count((case when (`seed`.`status` = 'new') then `seed`.`id` end)) AS `new`,count((case when (`seed`.`status` = 'ok') then `seed`.`id` end)) AS `ok`,count((case when (`seed`.`status` = 'err') then `seed`.`id` end)) AS `err` from `seed` group by `seed`.`source`,`seed`.`category`;
+
+-- --------------------------------------------------------
+
+--
+-- Structure for view `v_stats_seed_date`
+--
+DROP TABLE IF EXISTS `v_stats_seed_date`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `v_stats_seed_date` AS select `seed`.`source` AS `source`,cast(`seed`.`inserted_at` as date) AS `insert_date`,count(`seed`.`id`) AS `total`,count((case when (`seed`.`status` = 'new') then `seed`.`id` end)) AS `new`,count((case when (`seed`.`status` = 'ok') then `seed`.`id` end)) AS `ok`,count((case when (`seed`.`status` = 'err') then `seed`.`id` end)) AS `err` from `seed` group by `seed`.`source`,cast(`seed`.`inserted_at` as date) order by `seed`.`source`,cast(`seed`.`inserted_at` as date);
+
+-- --------------------------------------------------------
+
+--
+-- Structure for view `v_stats_seed_overall`
+--
+DROP TABLE IF EXISTS `v_stats_seed_overall`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `v_stats_seed_overall` AS select `seed`.`source` AS `source`,count(`seed`.`id`) AS `total`,count((case when (`seed`.`status` = 'new') then `seed`.`id` end)) AS `new`,count((case when (`seed`.`status` = 'ok') then `seed`.`id` end)) AS `ok`,count((case when (`seed`.`status` = 'err') then `seed`.`id` end)) AS `err` from `seed` group by `seed`.`source`;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
