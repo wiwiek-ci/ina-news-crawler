@@ -13,10 +13,13 @@ class FilterAndFlagPipeline(object):
     def process_item(self, item, spider):
         global conn
 
-        if len(item['title']) > 0 and len(item['content']) > 0:
-            status = "ok"
-        else:
-            status = "err"
+        status = "ok"
+        if len(item['title']) <= 0:
+            status = "err: no title"
+        elif len(item['content']) <= 0:
+            status = "err: no content"
+        elif len(item['published_at']) <= 0:
+            status = "err: no published date"
         
         # Print to screen
         # print "[%s] %s Fetch %s: %s" % (spider.name, datetime.now(), item['source'], status)
@@ -24,7 +27,7 @@ class FilterAndFlagPipeline(object):
         if status == "ok":
             return item
         else:
-            print "[%s] %s %s (%s)" % (spider.name, datetime.now(), status, item['url'])
+            print "[%s] %s %s %s (%s)" % (spider.name, datetime.now().strftime("%Y-%m-%d %H:%M"), item['published_at'], status, item['url'])
             raise DropItem("Drop false article: %s" % item['source'])
 
 class DuplicatePipeline(object):
@@ -41,7 +44,7 @@ class DuplicatePipeline(object):
         result = cursor.fetchone()
 
         if result != None and len(result) > 0:
-            print "[%s] %s duplicate" % (spider.name, datetime.now())
+            print "[%s] %s duplicate" % (spider.name, datetime.now().strftime("%Y-%m-%d %H:%M"))
             raise DropItem("Drop duplicate item: %s" % result[0])
         else:
             return item
@@ -58,7 +61,7 @@ class MySQLStorePipeline(object):
         cursor.execute(query, (item['source'], item['url'], item['category'], item['title'], item['content'], item['subtitle'], item['published_at'], item['place'], item['author']))
 
         # Print to screen
-        print "[%s] %s ok" % (spider.name, datetime.now())
+        print "[%s] %s %s ok" % (spider.name, datetime.now().strftime("%Y-%m-%d %H:%M"), item['published_at'])
 
         return item
 
