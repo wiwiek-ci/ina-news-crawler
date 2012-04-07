@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Apr 07, 2012 at 12:49 PM
+-- Generation Time: Apr 07, 2012 at 08:48 PM
 -- Server version: 5.1.41
 -- PHP Version: 5.3.1
 
@@ -39,7 +39,7 @@ CREATE TABLE IF NOT EXISTS `article` (
   `fetched_at` datetime NOT NULL,
   `is_gathered` tinyint(4) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=51162 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=65125 ;
 
 -- --------------------------------------------------------
 
@@ -56,6 +56,30 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW 
 --
 
 CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `akademik_crawler`.`v_stats_date` AS select `akademik_crawler`.`article`.`source` AS `source`,cast(`akademik_crawler`.`article`.`fetched_at` as date) AS `fetch_date`,count(`akademik_crawler`.`article`.`id`) AS `total` from `akademik_crawler`.`article` group by cast(`akademik_crawler`.`article`.`fetched_at` as date),`akademik_crawler`.`article`.`source` order by `akademik_crawler`.`article`.`source`,cast(`akademik_crawler`.`article`.`fetched_at` as date) desc;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `v_stats_gathered`
+--
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `akademik_crawler`.`v_stats_gathered` AS select count(`akademik_crawler`.`article`.`id`) AS `total`,count((case when (`akademik_crawler`.`article`.`is_gathered` = 1) then 1 else NULL end)) AS `gathered` from `akademik_crawler`.`article`;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `v_stats_pub_month`
+--
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `akademik_crawler`.`v_stats_pub_month` AS select `akademik_crawler`.`article`.`source` AS `source`,year(`akademik_crawler`.`article`.`published_at`) AS `year`,month(`akademik_crawler`.`article`.`published_at`) AS `month`,count(`akademik_crawler`.`article`.`id`) AS `total` from `akademik_crawler`.`article` group by year(`akademik_crawler`.`article`.`published_at`),month(`akademik_crawler`.`article`.`published_at`),`akademik_crawler`.`article`.`source` order by `akademik_crawler`.`article`.`source` desc;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `v_stats_pub_year`
+--
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `akademik_crawler`.`v_stats_pub_year` AS select `akademik_crawler`.`article`.`source` AS `source`,year(`akademik_crawler`.`article`.`published_at`) AS `year`,count(`akademik_crawler`.`article`.`id`) AS `total` from `akademik_crawler`.`article` group by year(`akademik_crawler`.`article`.`published_at`),`akademik_crawler`.`article`.`source` order by `akademik_crawler`.`article`.`source`,cast(`akademik_crawler`.`article`.`published_at` as date) desc;
 
 -- --------------------------------------------------------
 
