@@ -59,20 +59,21 @@ public class DocumentHelper {
     public void save(){
         Writer output = null;
         try {
-            Date publishedDate = new Date(((Timestamp)this.features.get("published_at")).getTime());
+            Date fetchedDate = new Date(((Timestamp)this.features.get("fetched_at")).getTime());
             SimpleDateFormat year = new SimpleDateFormat("yyyy");
             SimpleDateFormat month = new SimpleDateFormat("MM");
+            SimpleDateFormat day = new SimpleDateFormat("dd");
             File parentDir = new File(Configuration.getConfiguration().getFiles_path());
             if(! parentDir.exists()){
                 parentDir.mkdirs();
             }
             File dir = new File(
                     parentDir,
-                    this.features.get("category").toString() + File.separator + year.format(publishedDate) + File.separator + month.format(publishedDate));
+                    year.format(fetchedDate) + File.separator + month.format(fetchedDate) + File.separator + day.format(fetchedDate));
             if (!dir.exists()) {
                 dir.mkdirs();
             }
-            file = new File(dir, this.features.get("id").toString() + ".xml");
+            file = new File(dir, this.features.get("category").toString() + "_" + this.features.get("id").toString() + ".xml");
             output = new BufferedWriter(new FileWriter(file));
             output.write(getDocument().toXml());
             output.close();

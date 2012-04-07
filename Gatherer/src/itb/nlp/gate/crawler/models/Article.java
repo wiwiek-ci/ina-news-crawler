@@ -31,7 +31,7 @@ public class Article {
             Statement selectStatement = connection.createStatement();
             // Fetch data from database
             String fetchQuery = "SELECT id, source, url, category, title, subtitle, content, " 
-                    + "published_at, place, author "
+                    + "published_at, place, author, fetched_at "
                     + "FROM article "
                     + "WHERE is_gathered = 0 "
                     + "ORDER BY id ASC "

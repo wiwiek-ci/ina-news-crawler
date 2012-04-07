@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Apr 07, 2012 at 11:59 AM
+-- Generation Time: Apr 07, 2012 at 12:49 PM
 -- Server version: 5.1.41
 -- PHP Version: 5.3.1
 
@@ -37,8 +37,9 @@ CREATE TABLE IF NOT EXISTS `article` (
   `place` varchar(25) DEFAULT NULL,
   `author` varchar(25) DEFAULT NULL,
   `fetched_at` datetime NOT NULL,
+  `is_gathered` tinyint(4) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=49314 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=51162 ;
 
 -- --------------------------------------------------------
 
