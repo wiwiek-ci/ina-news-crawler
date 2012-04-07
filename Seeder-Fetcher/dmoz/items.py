@@ -5,11 +5,6 @@
 
 from scrapy.item import Item, Field
 
-class SeedItem(Item):
-    source = Field()
-    category = Field()
-    url = Field()
-
 class ArticleItem(Item):
     id = Field()
     source = Field()

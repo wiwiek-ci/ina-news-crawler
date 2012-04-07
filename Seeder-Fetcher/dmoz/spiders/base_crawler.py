@@ -1,19 +1,17 @@
 from datetime import datetime
+from scrapy.contrib.spiders import CrawlSpider
 from scrapy.selector.libxml2sel import HtmlXPathSelector
-from scrapy.spider import BaseSpider
 
 from __init__ import *
 from dmoz.items import ArticleItem
-from dmoz.items import SeedItem
 from dmoz.spiders import capitalizeFirstCharInWord
-from dmoz.spiders import conn
 from dmoz.spiders import sanitize
-import feedparser
 
 #
-# BASE SEEDER
+# CRAWL SPIDER
 #
-class BaseSeeder(BaseSpider):
+class NewsBaseCrawler(CrawlSpider):
+    # Category
     CATEGORY_NATIONAL = "Nasional"
     CATEGORY_INTERNATIONAL = "Internasional"
     CATEGORY_ECONOMY = "Ekonomi"
@@ -24,82 +22,23 @@ class BaseSeeder(BaseSpider):
     CATEGORY_ENTERTAINMENT = "Hiburan"
     CATEGORY_OTHERS = "Lain-lain"
 
-    name = None
-    source = None
-    start_urls = None
+    # Debug
+    debug = False
 
-    def __init__(self):
-        self.allowed_domains = [self.source]
-
-    def parse(self, response):
-        category = self.parse_category(response)
-        feed = response.body
-        items = []
-        d = feedparser.parse(feed)
-        for entry in d['entries']:
-            item = SeedItem()
-            item['source'] = self.source
-            item['category'] = self.normalize_category(category)
-            item['url'] = entry.link
-            items.append(item)
-        return items
-
-    def parse_category(self, response):
-        prep_url = response.url.rpartition('/')[0]
-        pos_url = response.url.rpartition('/')[2]
-        if pos_url == 'index.rss':
-            return prep_url.rpartition('/')[2]
-        else:
-            return pos_url
-
-    def normalize_category(self, category_str):
-        return category_str
-
-#
-# BASE FETCHER
-#
-class BaseFetcher(BaseSpider):
-    name = '//none'
-    source = '//none'
-    xpath_title = '//none'
-    xpath_content = '//none'
-    xpath_subtitle = '//none'
-    xpath_published_at = '//none'
-    xpath_place = '//none'
-    xpath_author = '//none'
-
-    global conn
-
-    def __init__(self):
-        self.allowed_domains = [self.source]
-        self.start_urls = []
-
-        cursor = conn.cursor()
-        query = """
-            SELECT id, source, category, url
-            FROM seed
-            WHERE status = 'new'
-            AND source = %s
-            ORDER BY inserted_at DESC
-            LIMIT 1
-        """
-        cursor.execute(query, (self.source))
-        result = cursor.fetchone()
-        if result != None:
-            self.id = result[0]
-            self.source = result[1]
-            self.category = result[2]
-            self.start_urls.append(result[3])
-
-    def parse(self, response):
+    def parse_item(self, response):
         hxs = HtmlXPathSelector(response)
 
         # Assign given elements
         article = ArticleItem()
-        article['id'] = self.id
         article['source'] = self.source
         article['url'] = response.url
-        article['category'] = self.category
+
+        # Parse Category
+        try:
+            category_str = sanitize(self.get_category(response))
+            article['category'] = capitalizeFirstCharInWord(self.normalize_category(self.parse_category(category_str)))
+        except:
+            article['category'] = ''
 
         # Parse Title
         try:
@@ -126,7 +65,7 @@ class BaseFetcher(BaseSpider):
         try:
             date_str = sanitize(hxs.select(self.xpath_published_at).extract()[0])
             article['published_at'] = self.parse_date(date_str)
-        except IndexError:
+        except:
             article['published_at'] = ''
 
         # Parse Place
@@ -143,8 +82,12 @@ class BaseFetcher(BaseSpider):
         except:
             article['author'] = ''
 
-        # Return value
-        return article
+        # Debug
+        if self.debug == True:
+            print article
+            print ''
+        else:
+            return article
 
     def parse_date(self, date_str):
         return datetime.now().strftime("%Y-%m-%d %H:%M")
@@ -154,3 +97,13 @@ class BaseFetcher(BaseSpider):
 
     def parse_author(self, author_str):
         return author_str
+
+    def get_category(self, response):
+        hxs = HtmlXPathSelector(response)
+        return hxs.select(self.xpath_category).extract()[0]
+
+    def parse_category(self, category_str):
+        return category_str
+
+    def normalize_category(self, category_str):
+        return category_str
