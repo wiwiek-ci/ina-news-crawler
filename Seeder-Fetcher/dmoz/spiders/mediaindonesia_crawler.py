@@ -34,8 +34,46 @@ class MediaindonesiaCrawler(NewsBaseCrawler):
     xpath_content = '//div[@id="baca"]/div[7]'
 
     # Overriden methods
+    def parse_date(self, date_str):
+        split_str = date_str.split(' ')
+
+        year = split_str[4]
+
+        if split_str[3] == 'Januari':
+            month = '01'
+        elif split_str[3] == 'Pebruari' or split_str[2] == 'Februari':
+            month = '02'
+        elif split_str[3] == 'Maret':
+            month = '03'
+        elif split_str[3] == 'April':
+            month = '04'
+        elif split_str[3] == 'Mei':
+            month = '05'
+        elif split_str[3] == 'Juni':
+            month = '06'
+        elif split_str[3] == 'Juli':
+            month = '07'
+        elif split_str[3] == 'Agustus':
+            month = '08'
+        elif split_str[3] == 'September':
+            month = '09'
+        elif split_str[3] == 'Oktober':
+            month = '10'
+        elif split_str[3] == 'November' or split_str[2] == 'Nopember':
+            month = '11'
+        elif split_str[3] == 'Desember':
+            month = '12'
+        else:
+            return ''
+
+        day = split_str[2]
+
+        time = split_str[5]
+        return "%s-%s-%s %s:00" % (year, month, day, time)
+
     def parse_place(self, place_str):
         split_str = place_str.split(',')
+        split_str = split_str[0].split('-')
         return split_str[0]
 
     def get_category(self, response):

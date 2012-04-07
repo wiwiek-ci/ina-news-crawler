@@ -56,7 +56,7 @@ public class Gatherer {
                     String title = resultSet.getString(5);
                     String subtitle = resultSet.getString(6);
                     String content = resultSet.getString(7);
-                    //Timestamp published_at = resultSet.getTimestamp(8);
+                    Timestamp published_at = resultSet.getTimestamp(8);
                     String place = resultSet.getString(9);
                     String author = resultSet.getString(10);
                     Timestamp fetched_at = resultSet.getTimestamp(11);
@@ -78,8 +78,8 @@ public class Gatherer {
                     features.put("category", category);
                     features.put("title", title);
                     features.put("subtitle", subtitle);
-                    //features.put("published_at", published_at);
-                    //features.put("published_at_str", published_at.toString());
+                    features.put("published_at", published_at);
+                    features.put("published_at_str", published_at.toString());
                     features.put("fetched_at", fetched_at);
                     features.put("fetched_at_str", fetched_at.toString());
                     features.put("place", place);

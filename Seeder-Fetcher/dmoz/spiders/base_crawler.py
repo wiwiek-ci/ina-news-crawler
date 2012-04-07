@@ -90,7 +90,7 @@ class NewsBaseCrawler(CrawlSpider):
             return article
 
     def parse_date(self, date_str):
-        return datetime.now().strftime("%Y-%m-%d %H:%M")
+        return date_str
 
     def parse_place(self, place_str):
         return place_str
