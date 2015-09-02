@@ -1,0 +1,1 @@
+Crawler for Indonesian news sites based on Scrapy
